@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sort CSV Data</title>
+</head>
+<body>
+  <h1>Find ledig lokation</h1>
+  <p>Ledig lokation: <span id="randomCell"></span></p>
+
+  <button onclick="sortCellsByPrefix('401')">401</button>
+  <button onclick="sortCellsByPrefix('402')">402</button>
+  <button onclick="sortCellsByPrefix('403')">403</button>
+  <button onclick="sortCellsByPrefix('404')">404</button>
+  <button onclick="sortCellsByPrefix('405')">405</button>
+  <button onclick="sortCellsByPrefix('406')">406</button>
+  <button onclick="sortCellsByPrefix('407')">407</button>
+  <button onclick="sortCellsByPrefix('408')">408</button>
+  <button onclick="sortCellsByPrefix('409')">409</button>
+  <button onclick="sortCellsByPrefix('410')">410</button>
+  <button onclick="sortCellsByPrefix('411')">411</button>
+  <button onclick="sortCellsByPrefix('412')">412</button>
+  <button onclick="sortCellsByPrefix('415')">415</button>
+  <button onclick="sortCellsByPrefix('416')">416</button>
+  <button onclick="sortCellsByPrefix('417')">417</button>
+  <button onclick="sortCellsByPrefix('418')">418</button>
+  <button onclick="sortCellsByPrefix('419')">419</button>
+  <button onclick="sortCellsByPrefix('420')">420</button>
+  <button onclick="sortCellsByPrefix('421')">421</button>
+  <button onclick="sortCellsByPrefix('422')">422</button>
+  <button onclick="sortCellsByPrefix('423')">423</button>
+  <button onclick="sortCellsByPrefix('424')">424</button>
+  <button onclick="sortCellsByPrefix('425')">425</button>
+  <button onclick="sortCellsByPrefix('426')">426</button>
+  <!-- Add more buttons for other prefixes as needed -->
+  <button onclick="resetData()">Reset Data</button>
+
+  <script>
+    var originalCsvData;
+    var filteredCells = [];
+    var currentCellIndex = 0;
+
+    function getRandomCellFromCSV() {
+      if (filteredCells.length > 0) {
+        var randomCell = filteredCells[Math.floor(Math.random() * filteredCells.length)];
+        document.getElementById('randomCell').textContent = randomCell;
+      } else {
+        document.getElementById('randomCell').textContent = "No cells found with the specified prefix";
+      }
+    }
+
+    function generateRandomCell() {
+      getRandomCellFromCSV();
+    }
+
+    function sortCellsByPrefix(prefix) {
+      filteredCells = [];
+      var allRows = originalCsvData.split(/\r?\n|\r/);
+
+      allRows.forEach(function(row) {
+        var cells = row.split(',');
+        cells.forEach(function(cell) {
+          if (cell.trim().startsWith(prefix)) {
+            filteredCells.push(cell.trim());
+          }
+        });
+      });
+
+      filteredCells.sort(); // Sort the cells alphabetically
+
+      if (filteredCells.length > 0) {
+        document.querySelector('button').removeAttribute('disabled');
+      } else {
+        document.querySelector('button').setAttribute('disabled', 'disabled');
+      }
+      
+      getRandomCellFromCSV();
+    }
+
+    function resetData() {
+      filteredCells = [];
+      currentCellIndex = 0;
+      document.querySelector('button').setAttribute('disabled', 'disabled');
+      getRandomCellFromCSV();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var csvFilePath = 'lokation1.csv';
+
+      fetch(csvFilePath)
+        .then(function(response) {
+          return response.text();
+        })
+        .then(function(data) {
+          originalCsvData = data;
+          document.querySelector('button').setAttribute('disabled', 'disabled');
+        })
+        .catch(function(error) {
+          console.error('Fejl ved indlæsning af CSV-fil:', error);
+        });
+    });
+  </script>
+</body>
+</html>
